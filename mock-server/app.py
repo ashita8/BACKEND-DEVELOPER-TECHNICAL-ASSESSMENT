@@ -25,6 +25,13 @@ def get_customers():
         "limit": limit
     }
 
+@app.route("/api/customers/<id>")
+def get_customer(id):
+    for c in customers:
+        if c["customer_id"] == id:
+            return c
+    return {"error": "Not found"}, 404
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 
