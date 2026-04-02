@@ -9,3 +9,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: customer_db
+
+  mock-server:
+    build: ./mock-server
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
