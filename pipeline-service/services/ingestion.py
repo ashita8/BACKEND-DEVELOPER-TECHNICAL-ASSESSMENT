@@ -24,14 +24,29 @@ def fetch_all():
 def upsert_customers(customers):
     db = SessionLocal()
 
+    allowed_fields = {
+        "customer_id",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "address",
+        "date_of_birth",
+        "account_balance",
+        "created_at"
+    }
+
     for c in customers:
+        # filter only valid fields
+        filtered = {k: v for k, v in c.items() if k in allowed_fields}
+
         existing = db.query(Customer).filter_by(customer_id=c["customer_id"]).first()
 
         if existing:
-            for key, value in c.items():
+            for key, value in filtered.items():
                 setattr(existing, key, value)
         else:
-            db.add(Customer(**c))
+            db.add(Customer(**filtered))
 
     db.commit()
     db.close()
